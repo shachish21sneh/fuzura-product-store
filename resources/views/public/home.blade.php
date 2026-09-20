@@ -23,16 +23,14 @@
 
                 <!-- Command-Palette Search Console -->
                 <div class="search-console-card">
-                    <form action="{{ route('public.search') }}" method="GET" class="d-flex flex-column flex-sm-row gap-2.5">
-                        <div class="input-group flex-grow-1">
-                            <span class="input-group-text bg-transparent border-0 text-muted ps-2 pe-0">
-                                <i class="fas fa-barcode fs-4" style="color: #818cf8;"></i>
-                            </span>
-                            <input type="text" name="serial_number" class="form-control search-console-input font-mono" 
-                                   placeholder="Enter Serial Number (e.g. FZ-SN-1002)" required autocomplete="off">
+                    <form action="{{ route('public.search') }}" method="GET" class="unified-search-bar">
+                        <div class="search-bar-icon">
+                            <i class="fas fa-barcode"></i>
                         </div>
-                        <button type="submit" class="btn btn-primary-custom px-4 py-2.5 d-flex align-items-center justify-content-center gap-2 fs-6">
-                            <i class="fas fa-bolt text-warning"></i>
+                        <input type="text" name="serial_number" class="search-bar-input" 
+                               placeholder="Enter Product Serial Number (e.g. FZ-SN-1002)" required autocomplete="off">
+                        <button type="submit" class="search-bar-btn">
+                            <i class="fas fa-bolt"></i>
                             <span>Verify Status</span>
                         </button>
                     </form>

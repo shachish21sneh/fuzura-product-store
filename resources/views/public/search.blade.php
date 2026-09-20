@@ -19,36 +19,46 @@
                 </p>
 
                 <!-- Search Card -->
-                <div class="search-console-card p-3 p-sm-4 text-start mx-auto" style="max-width: 720px;">
-                    <form action="{{ route('public.search') }}" method="GET" class="d-flex flex-column flex-sm-row gap-2">
-                        <div class="input-group flex-grow-1">
-                            <span class="input-group-text bg-transparent border-0 text-muted ps-2 pe-0">
-                                <i class="fas fa-barcode fs-4" style="color: #818cf8;"></i>
-                            </span>
-                            <input type="text" name="serial_number" class="form-control search-console-input font-mono" 
-                                   value="{{ $searchedSerial }}" placeholder="Enter Serial (e.g. FZ-SN-1002)" required autocomplete="off">
+                <div class="search-console-card text-start mx-auto" style="max-width: 760px;">
+                    <form action="{{ route('public.search') }}" method="GET" class="unified-search-bar">
+                        <div class="search-bar-icon">
+                            <i class="fas fa-barcode"></i>
                         </div>
-                        <button type="submit" class="btn btn-primary-custom px-4 py-3 d-flex align-items-center justify-content-center gap-2">
-                            <i class="fas fa-bolt text-warning"></i>
-                            <span>Verify Unit</span>
+                        <input type="text" name="serial_number" class="search-bar-input" 
+                               value="{{ $searchedSerial }}" placeholder="Enter Product Serial Number (e.g. FZ-SN-1002)" required autocomplete="off">
+                        <button type="submit" class="search-bar-btn">
+                            <i class="fas fa-bolt"></i>
+                            <span>Verify Status</span>
                         </button>
                     </form>
 
                     <!-- Sample Chips for Testing -->
-                    <div class="d-flex flex-wrap align-items-center gap-2 mt-3 pt-3" style="border-top: 1px solid rgba(255,255,255,0.08);">
-                        <span class="small fw-semibold" style="color: #94a3b8; font-size: 0.78rem;">Quick Test Chips:</span>
-                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-1002']) }}" class="sample-chip">
-                            <i class="fas fa-repeat text-warning"></i> FZ-SN-1002 <span class="opacity-75">(Step 1)</span>
-                        </a>
-                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-1004']) }}" class="sample-chip">
-                            <i class="fas fa-circle-check text-success"></i> FZ-SN-1004 <span class="opacity-75">(Active)</span>
-                        </a>
-                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-2001']) }}" class="sample-chip">
-                            <i class="fas fa-shield text-info"></i> FZ-SN-2001 <span class="opacity-75">(Active)</span>
-                        </a>
-                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-3001']) }}" class="sample-chip">
-                            <i class="fas fa-clock text-danger"></i> FZ-SN-3001 <span class="opacity-75">(Expired)</span>
-                        </a>
+                    <div class="demo-serials-container">
+                        <span class="demo-serials-label">
+                            <i class="fas fa-flask text-warning"></i> Quick Test:
+                        </span>
+                        <div class="demo-serials-chips">
+                            <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-1002']) }}" class="sample-chip">
+                                <i class="fas fa-repeat text-warning"></i>
+                                <span>FZ-SN-1002</span>
+                                <span class="chip-context">(Level 1)</span>
+                            </a>
+                            <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-1004']) }}" class="sample-chip">
+                                <i class="fas fa-circle-check text-success"></i>
+                                <span>FZ-SN-1004</span>
+                                <span class="chip-context">(Active)</span>
+                            </a>
+                            <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-2001']) }}" class="sample-chip">
+                                <i class="fas fa-shield text-info"></i>
+                                <span>FZ-SN-2001</span>
+                                <span class="chip-context">(Active)</span>
+                            </a>
+                            <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-3001']) }}" class="sample-chip">
+                                <i class="fas fa-clock text-danger"></i>
+                                <span>FZ-SN-3001</span>
+                                <span class="chip-context">(Expired)</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -100,14 +100,16 @@
 
     <!-- Main Content Container -->
     <main class="flex-grow-1">
-        <div class="container mt-3">
-            @include('partials.alerts')
-        </div>
+        @if (session('success') || session('error') || session('warning') || session('info') || $errors->any())
+            <div class="container mt-3">
+                @include('partials.alerts')
+            </div>
+        @endif
         @yield('content')
     </main>
 
     <!-- Footer -->
-    <footer class="text-white pt-5 pb-4 mt-5" style="background-color: #080c15 !important; border-top: 1px solid rgba(255,255,255,0.08);">
+    <footer class="text-white pt-4 pb-3" style="background-color: #080c15 !important; border-top: 1px solid rgba(255,255,255,0.08);">
         <div class="container">
             <div class="row g-4 justify-content-between">
                 <div class="col-lg-4">

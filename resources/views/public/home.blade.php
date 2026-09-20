@@ -86,36 +86,41 @@
                     </div>
 
                     <!-- Visual Chain Flow (Clean 4-Node Pipeline, No Awkward Wrapping) -->
-                    <div class="telemetry-node-chain mb-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2.5">
-                            <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">Live Replacement Pipeline</span>
-                            <span class="badge bg-dark text-muted font-mono" style="font-size: 0.68rem;">4 Verifiable Nodes</span>
+                    <div class="telemetry-node-chain">
+                        <div class="telemetry-header-row">
+                            <span class="telemetry-pipeline-title">
+                                <i class="fas fa-network-wired text-indigo-400"></i> Live Replacement Pipeline
+                            </span>
+                            <span class="telemetry-nodes-pill">
+                                <i class="fas fa-layer-group text-indigo-300"></i>
+                                <span>4 Verified Nodes</span>
+                            </span>
                         </div>
                         
                         <div class="telemetry-pipeline">
                             <div class="pipeline-node pipeline-node-orig" title="Original Sale">
-                                <span class="pipeline-tag text-muted">Original</span>
+                                <span class="pipeline-tag pipeline-tag-orig">Original</span>
                                 <span class="pipeline-serial text-white">FZ-1001</span>
                             </div>
                             <i class="fas fa-chevron-right pipeline-arrow"></i>
                             <div class="pipeline-node pipeline-node-rep" title="Replacement #1">
-                                <span class="pipeline-tag text-warning">RMA #1</span>
+                                <span class="pipeline-tag pipeline-tag-rep">RMA #1</span>
                                 <span class="pipeline-serial text-white">FZ-1002</span>
                             </div>
                             <i class="fas fa-chevron-right pipeline-arrow"></i>
                             <div class="pipeline-node pipeline-node-rep" title="Replacement #2">
-                                <span class="pipeline-tag text-warning">RMA #2</span>
+                                <span class="pipeline-tag pipeline-tag-rep">RMA #2</span>
                                 <span class="pipeline-serial text-white">FZ-1003</span>
                             </div>
                             <i class="fas fa-chevron-right pipeline-arrow"></i>
                             <div class="pipeline-node pipeline-node-active" title="Current Active In-Use Device">
-                                <span class="pipeline-tag text-success">Active</span>
+                                <span class="pipeline-tag pipeline-tag-active">Active</span>
                                 <span class="pipeline-serial text-success">FZ-1004</span>
                             </div>
                         </div>
 
-                        <div class="mt-3 pt-2.5 border-top border-white border-opacity-10 d-flex justify-content-between align-items-center small" style="font-size: 0.74rem; color: #94a3b8;">
-                            <span>Active Warranty:</span>
+                        <div class="telemetry-footer-status">
+                            <span class="fw-medium" style="color: #cbd5e1;">Active Warranty:</span>
                             <span class="text-success fw-bold font-mono d-flex align-items-center gap-1.5">
                                 <i class="fas fa-shield-check"></i> 547 Days Active (Till 2027)
                             </span>

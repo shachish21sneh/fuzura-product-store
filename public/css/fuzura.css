@@ -172,35 +172,35 @@ body {
 }
 
 /* ==========================================================================
-   Search Console Card
+   Search Console Card & Demo Chips
    ========================================================================== */
 
 .search-console-card {
-    background: rgba(15, 23, 42, 0.82);
+    background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(99, 102, 241, 0.25);
-    border-radius: 1rem;
+    box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(99, 102, 241, 0.25);
+    border-radius: 1.15rem;
     position: relative;
     z-index: 10;
-    padding: 1.25rem 1.35rem;
+    padding: 1.65rem;
 }
 
 .search-console-input {
     background: rgba(255, 255, 255, 0.06) !important;
     border: 1px solid rgba(255, 255, 255, 0.14) !important;
     color: #ffffff !important;
-    font-size: 0.96rem;
-    border-radius: 0.65rem !important;
-    height: 48px;
-    padding: 0.7rem 1rem !important;
+    font-size: 1rem;
+    border-radius: 0.75rem !important;
+    height: 52px;
+    padding: 0.75rem 1.15rem !important;
     transition: all 0.25s ease;
 }
 
 .search-console-input::placeholder {
     color: #94a3b8 !important;
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
 .search-console-input:focus {
@@ -210,40 +210,71 @@ body {
     color: #fff !important;
 }
 
+.demo-serials-container {
+    margin-top: 1.25rem;
+    padding-top: 1.15rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 0.65rem;
+}
+
+.demo-serials-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 0.25rem;
+}
+
 .sample-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #cbd5e1;
+    gap: 0.45rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e2e8f0;
     text-decoration: none;
-    padding: 0.25rem 0.55rem;
-    border-radius: 0.45rem;
-    font-size: 0.74rem;
+    padding: 0.38rem 0.75rem;
+    border-radius: 0.55rem;
+    font-size: 0.78rem;
     font-family: 'JetBrains Mono', monospace;
-    transition: all 0.2s ease;
+    line-height: 1.35;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .sample-chip:hover {
-    background: rgba(99, 102, 241, 0.2);
-    border-color: rgba(99, 102, 241, 0.5);
-    color: #fff;
-    transform: translateY(-1px);
+    background: rgba(99, 102, 241, 0.25);
+    border-color: rgba(99, 102, 241, 0.6);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+}
+
+.sample-chip .chip-context {
+    opacity: 0.75;
+    font-size: 0.72rem;
+    font-weight: 500;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 /* ==========================================================================
-   Telemetry HUD Deck (Hero Right)
+   Telemetry HUD Deck (Hero Right) & 4-Node Pipeline
    ========================================================================== */
 
 .telemetry-deck {
-    background: linear-gradient(135deg, rgba(20, 30, 51, 0.75) 0%, rgba(15, 23, 42, 0.85) 100%);
+    background: linear-gradient(135deg, rgba(20, 30, 51, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 1.15rem;
-    padding: 1.35rem 1.45rem;
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    padding: 1.65rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     position: relative;
     overflow: hidden;
 }
@@ -260,46 +291,83 @@ body {
 }
 
 .telemetry-node-chain {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 0.75rem;
-    padding: 0.85rem;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.85rem;
+    padding: 1.15rem;
 }
 
-.chain-step {
-    padding: 0.3rem 0.55rem;
-    border-radius: 0.35rem;
-    font-size: 0.72rem;
-    font-weight: 600;
+.telemetry-pipeline {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.pipeline-node {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 0.55rem;
+    padding: 0.55rem 0.35rem;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.pipeline-node:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+.pipeline-node-orig {
+    border-color: rgba(148, 163, 184, 0.3);
+}
+
+.pipeline-node-rep {
+    border-color: rgba(245, 158, 11, 0.35);
+    background: rgba(245, 158, 11, 0.08);
+}
+
+.pipeline-node-active {
+    border-color: rgba(16, 185, 129, 0.5);
+    background: rgba(16, 185, 129, 0.14);
+    box-shadow: 0 0 14px rgba(16, 185, 129, 0.25);
+}
+
+.pipeline-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+}
+
+.pipeline-serial {
     font-family: 'JetBrains Mono', monospace;
-    letter-spacing: -0.02em;
+    font-size: 0.76rem;
+    font-weight: 800;
+    display: block;
+    line-height: 1;
 }
 
-.chain-step-orig {
-    background: rgba(148, 163, 184, 0.15);
-    color: #94a3b8;
-    border: 1px solid rgba(148, 163, 184, 0.25);
-}
-
-.chain-step-rep {
-    background: rgba(245, 158, 11, 0.15);
-    color: #fbbf24;
-    border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.chain-step-active {
-    background: rgba(16, 185, 129, 0.2);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+.pipeline-arrow {
+    color: #64748b;
+    font-size: 0.68rem;
 }
 
 .telemetry-tile {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 0.65rem;
-    padding: 0.65rem 0.4rem;
+    border-radius: 0.75rem;
+    padding: 0.85rem 0.5rem;
     transition: all 0.2s ease;
+}
+
+.telemetry-tile:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
 }
 
 .telemetry-tile:hover {

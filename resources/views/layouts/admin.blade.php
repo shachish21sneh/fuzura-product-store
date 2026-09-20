@@ -27,10 +27,12 @@
         <!-- Sidebar Navigation -->
         <aside class="app-sidebar shadow">
             <div class="sidebar-brand">
-                <i class="fas fa-shield-halved"></i>
+                <div class="brand-emblem" style="width: 36px; height: 36px; font-size: 1.05rem;">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
                 <div>
-                    <div>FUZURA</div>
-                    <div style="font-size: 0.65rem; letter-spacing: 0.12em; color: #818cf8; font-weight: 700;">ADMIN CONSOLE</div>
+                    <div class="fw-extrabold lh-1 text-white">FUZURA<span class="text-gradient-accent ms-1">STORE</span></div>
+                    <div style="font-size: 0.62rem; letter-spacing: 0.12em; color: #818cf8; font-weight: 700; text-transform: uppercase;">Admin Console</div>
                 </div>
             </div>
 

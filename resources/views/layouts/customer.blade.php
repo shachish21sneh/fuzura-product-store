@@ -23,12 +23,14 @@
         <div class="sidebar-backdrop"></div>
 
         <!-- Customer Sidebar -->
-        <aside class="app-sidebar shadow" style="background: #1e1b4b !important;">
+        <aside class="app-sidebar shadow" style="background: #080c15 !important;">
             <div class="sidebar-brand">
-                <i class="fas fa-shield-halved" style="color: #a5b4fc;"></i>
+                <div class="brand-emblem" style="width: 36px; height: 36px; font-size: 1.05rem;">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
                 <div>
-                    <div>FUZURA</div>
-                    <div style="font-size: 0.65rem; letter-spacing: 0.12em; color: #c7d2fe; font-weight: 700;">CUSTOMER PORTAL</div>
+                    <div class="fw-extrabold lh-1 text-white">FUZURA<span class="text-gradient-accent ms-1">STORE</span></div>
+                    <div style="font-size: 0.62rem; letter-spacing: 0.12em; color: #38bdf8; font-weight: 700; text-transform: uppercase;">Customer Portal</div>
                 </div>
             </div>
 

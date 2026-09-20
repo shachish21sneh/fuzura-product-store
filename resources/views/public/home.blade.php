@@ -1,91 +1,119 @@
 @extends('layouts.public')
 
-@section('title', 'Fuzura - Product Registration & Warranty Management System')
+@section('title', 'Fuzura - Enterprise Product Registration & Warranty Management System')
 
 @section('content')
 <!-- Hero Section -->
-<section class="py-5 text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%);">
-    <div class="container py-5">
+<section class="hero-cosmic py-5 text-white">
+    <div class="container py-4 py-lg-5">
         <div class="row align-items-center g-5">
             <div class="col-lg-7">
-                <span class="badge bg-indigo-500 bg-opacity-25 text-white px-3 py-2 rounded-pill fw-semibold mb-3 border border-light border-opacity-25">
-                    <i class="fas fa-shield-check me-1 text-warning"></i> Next-Gen Warranty Lifecycle Tracking
-                </span>
-                <h1 class="display-4 fw-extrabold mb-3 text-white">
-                    Protect & Verify Your Products with <span style="color: #a5b4fc;">Zero Friction</span>
+                <div class="hero-pill-badge mb-3">
+                    <span class="pulse-led"></span>
+                    <span>Live Verification Engine • Recursive RMA Traversal v2.4</span>
+                </div>
+                
+                <h1 class="display-4 fw-extrabold mb-3 text-white" style="letter-spacing: -0.035em; line-height: 1.15;">
+                    Protect & Trace Hardware with <span class="text-gradient-accent">Zero Friction</span>
                 </h1>
-                <p class="lead text-light text-opacity-75 mb-4">
-                    Instant product warranty verification, unlimited replacement chain tracking, and digital certificate management powered by Fuzura.
+                
+                <p class="lead mb-4" style="color: #cbd5e1; font-size: 1.12rem; line-height: 1.6;">
+                    Enterprise serial verification, transparent multi-level replacement tracking, and automated digital certificate issuance powered by Fuzura's immutable ledger.
                 </p>
 
-                <!-- Prominent Public Search Bar -->
-                <div class="card p-2 p-sm-3 shadow-lg border-0 rounded-4 bg-white">
+                <!-- Command-Palette Search Console -->
+                <div class="search-console-card p-3 p-sm-4">
                     <form action="{{ route('public.search') }}" method="GET" class="d-flex flex-column flex-sm-row gap-2">
-                        <div class="input-group input-group-lg flex-grow-1">
-                            <span class="input-group-text bg-transparent border-0 text-muted ps-3">
-                                <i class="fas fa-barcode fs-4"></i>
+                        <div class="input-group flex-grow-1">
+                            <span class="input-group-text bg-transparent border-0 text-muted ps-2 pe-0">
+                                <i class="fas fa-barcode fs-4" style="color: #818cf8;"></i>
                             </span>
-                            <input type="text" name="serial_number" class="form-control border-0 shadow-none ps-2" 
-                                   placeholder="Enter Product Serial Number (e.g. FZ-SN-1001)" required>
+                            <input type="text" name="serial_number" class="form-control search-console-input font-mono" 
+                                   placeholder="Enter Serial Number (e.g. FZ-SN-1002)" required autocomplete="off">
                         </div>
                         <button type="submit" class="btn btn-primary-custom px-4 py-3 d-flex align-items-center justify-content-center gap-2 fs-6">
-                            <i class="fas fa-search"></i>
-                            <span>Check Warranty</span>
+                            <i class="fas fa-bolt text-warning"></i>
+                            <span>Verify Status</span>
                         </button>
                     </form>
 
-                    <!-- Quick Sample Chips -->
-                    <div class="mt-2 pt-2 border-top border-light-subtle d-flex flex-wrap align-items-center gap-2 small text-muted">
-                        <span class="fw-semibold">Try sample serials:</span>
-                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-1002']) }}" class="badge bg-light text-dark border text-decoration-none py-1 px-2">FZ-SN-1002 (Replaced)</a>
-                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-1004']) }}" class="badge bg-light text-dark border text-decoration-none py-1 px-2">FZ-SN-1004 (Active Unit)</a>
-                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-2001']) }}" class="badge bg-light text-dark border text-decoration-none py-1 px-2">FZ-SN-2001 (Active)</a>
-                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-3001']) }}" class="badge bg-light text-dark border text-decoration-none py-1 px-2">FZ-SN-3001 (Expired)</a>
+                    <!-- Quick Sample Serials -->
+                    <div class="mt-3 pt-3 d-flex flex-wrap align-items-center gap-2" style="border-top: 1px solid rgba(255,255,255,0.08);">
+                        <span class="small fw-semibold" style="color: #94a3b8; font-size: 0.8rem;">Try Demo Serials:</span>
+                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-1002']) }}" class="sample-chip">
+                            <i class="fas fa-repeat text-warning"></i> FZ-SN-1002 <span class="opacity-75">(Chain Step)</span>
+                        </a>
+                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-1004']) }}" class="sample-chip">
+                            <i class="fas fa-circle-check text-success"></i> FZ-SN-1004 <span class="opacity-75">(Active Unit)</span>
+                        </a>
+                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-2001']) }}" class="sample-chip">
+                            <i class="fas fa-shield text-info"></i> FZ-SN-2001 <span class="opacity-75">(Single Active)</span>
+                        </a>
+                        <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-3001']) }}" class="sample-chip">
+                            <i class="fas fa-clock text-danger"></i> FZ-SN-3001 <span class="opacity-75">(Expired)</span>
+                        </a>
                     </div>
                 </div>
             </div>
 
+            <!-- Hero Right: Interactive Telemetry HUD -->
             <div class="col-lg-5 d-none d-lg-block">
-                <div class="card bg-white bg-opacity-10 backdrop-blur border border-white border-opacity-10 rounded-4 p-4 shadow-lg text-white">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="telemetry-deck">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
                         <div class="d-flex align-items-center gap-2">
-                            <i class="fas fa-certificate text-warning fs-3"></i>
+                            <div class="brand-emblem" style="width: 28px; height: 28px; font-size: 0.85rem;">
+                                <i class="fas fa-microchip"></i>
+                            </div>
                             <div>
-                                <h6 class="mb-0 fw-bold">Live Status Monitor</h6>
-                                <small class="text-light-50">Realtime Chain Traversal</small>
+                                <h6 class="mb-0 fw-bold text-white small">Node Telemetry HUD</h6>
+                                <small style="color: #94a3b8; font-size: 0.72rem;">Recursive Chain Engine</small>
                             </div>
                         </div>
-                        <span class="badge bg-success bg-opacity-75">Operational</span>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.72rem;">
+                            <span class="pulse-led me-1 d-inline-block"></span> Operational
+                        </span>
                     </div>
 
-                    <div class="p-3 bg-dark bg-opacity-50 rounded-3 mb-3 border border-white border-opacity-10">
-                        <small class="text-light-50 d-block mb-1">Multi-Level Replacement Engine</small>
-                        <div class="d-flex align-items-center gap-2 font-monospace small">
-                            <span class="badge bg-secondary">Original</span>
-                            <i class="fas fa-arrow-right text-muted"></i>
-                            <span class="badge bg-secondary">Rep #1</span>
-                            <i class="fas fa-arrow-right text-muted"></i>
-                            <span class="badge bg-success">Active Leaf</span>
+                    <!-- Visual Chain Flow -->
+                    <div class="telemetry-node-chain mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Live Replacement Flow</span>
+                            <span class="badge bg-dark text-muted font-mono" style="font-size: 0.68rem;">4 Nodes</span>
+                        </div>
+                        
+                        <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                            <span class="chain-step chain-step-orig" title="Original Sale">FZ-1001 (Sold)</span>
+                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.65rem;"></i>
+                            <span class="chain-step chain-step-rep" title="Replacement #1">FZ-1002 (RMA)</span>
+                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.65rem;"></i>
+                            <span class="chain-step chain-step-rep" title="Replacement #2">FZ-1003 (RMA)</span>
+                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.65rem;"></i>
+                            <span class="chain-step chain-step-active" title="Current Active Unit">FZ-1004 (Active)</span>
+                        </div>
+                        <div class="mt-2 pt-2 border-top border-white border-opacity-10 d-flex justify-content-between small" style="font-size: 0.72rem; color: #94a3b8;">
+                            <span>Remaining Coverage:</span>
+                            <span class="text-success fw-bold font-mono">547 Days Active</span>
                         </div>
                     </div>
 
-                    <div class="row g-3 text-center">
+                    <!-- Metrics Grid -->
+                    <div class="row g-2 text-center">
                         <div class="col-4">
-                            <div class="p-2 rounded bg-white bg-opacity-10">
-                                <h5 class="mb-0 fw-bold">{{ $totalProducts }}+</h5>
-                                <small class="text-light-50">Catalog Units</small>
+                            <div class="telemetry-tile">
+                                <div class="fw-extrabold text-white fs-5 font-mono">{{ $totalProducts }}+</div>
+                                <small style="color: #94a3b8; font-size: 0.72rem;">Catalog SKUs</small>
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="p-2 rounded bg-white bg-opacity-10">
-                                <h5 class="mb-0 fw-bold">{{ $totalSales }}+</h5>
-                                <small class="text-light-50">Units Sold</small>
+                            <div class="telemetry-tile">
+                                <div class="fw-extrabold text-white fs-5 font-mono">{{ $totalSales }}+</div>
+                                <small style="color: #94a3b8; font-size: 0.72rem;">Units Tracked</small>
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="p-2 rounded bg-white bg-opacity-10">
-                                <h5 class="mb-0 fw-bold">{{ $totalRegistered }}+</h5>
-                                <small class="text-light-50">Warranties</small>
+                            <div class="telemetry-tile">
+                                <div class="fw-extrabold text-white fs-5 font-mono">{{ $totalRegistered }}+</div>
+                                <small style="color: #94a3b8; font-size: 0.72rem;">Certificates</small>
                             </div>
                         </div>
                     </div>
@@ -95,49 +123,177 @@
     </div>
 </section>
 
-<!-- How It Works Section -->
-<section class="py-5 bg-white">
+<!-- Trust Ribbon -->
+<section class="trust-ribbon">
+    <div class="container">
+        <div class="row g-3 justify-content-between align-items-center">
+            <div class="col-6 col-md-3">
+                <div class="trust-item">
+                    <i class="fas fa-fingerprint"></i>
+                    <span>Tamper-Proof Serial Ledger</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="trust-item">
+                    <i class="fas fa-diagram-project"></i>
+                    <span>Recursive Replacement Trees</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="trust-item">
+                    <i class="fas fa-certificate"></i>
+                    <span>Official PDF Certificates</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="trust-item">
+                    <i class="fas fa-store"></i>
+                    <span>Authorized Dealer Network</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section (Bento Grid) -->
+<section class="py-5" style="background-color: #f8fafc;">
     <div class="container py-4">
-        <div class="text-center max-w-700 mx-auto mb-5">
-            <span class="text-primary fw-bold text-uppercase small">Simple & Seamless Process</span>
-            <h2 class="fw-bold mt-1">How Customer Product Registration Works</h2>
-            <p class="text-muted">Register your product in under 2 minutes to protect your investment.</p>
+        <div class="text-center mx-auto mb-5" style="max-width: 650px;">
+            <span class="badge" style="background: rgba(99, 102, 241, 0.1); color: #4f46e5; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.45rem 1rem; border-radius: 9999px;">
+                Frictionless Workflow
+            </span>
+            <h2 class="fw-extrabold mt-3 text-dark" style="letter-spacing: -0.03em;">How Product Registration Works</h2>
+            <p class="text-muted" style="font-size: 1.05rem;">Register genuine Fuzura equipment in under 2 minutes to protect your hardware investment with instant certificate generation.</p>
         </div>
 
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center">
-                    <div class="mx-auto mb-3 bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
-                        <i class="fas fa-shopping-bag fs-4"></i>
+                <div class="bento-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="feature-icon-box icon-box-primary">
+                            <i class="fas fa-bag-shopping"></i>
+                        </div>
+                        <span class="step-num-badge">01</span>
                     </div>
-                    <h5 class="fw-bold">1. Purchase Product</h5>
-                    <p class="text-muted small">
-                        Purchase any authentic Fuzura equipment from our authorized dealers network.
+                    <h5 class="fw-bold text-dark mb-2">Purchase Authentic Gear</h5>
+                    <p class="text-muted small mb-0 lh-base">
+                        Acquire authentic Fuzura equipment from any authorized dealer, retail partner, or official distributor.
                     </p>
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center">
-                    <div class="mx-auto mb-3 bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
-                        <i class="fas fa-file-invoice-dollar fs-4"></i>
+                <div class="bento-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="feature-icon-box icon-box-cyan">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <span class="step-num-badge">02</span>
                     </div>
-                    <h5 class="fw-bold">2. Upload Bill & Register</h5>
-                    <p class="text-muted small">
-                        Log in to your customer portal, enter the serial number and upload your purchase invoice.
+                    <h5 class="fw-bold text-dark mb-2">Submit Invoice & Serial</h5>
+                    <p class="text-muted small mb-0 lh-base">
+                        Log in to your customer portal, enter your serial number, and upload purchase invoice for automated verification.
                     </p>
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center">
-                    <div class="mx-auto mb-3 bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
-                        <i class="fas fa-award fs-4"></i>
+                <div class="bento-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="feature-icon-box icon-box-success">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <span class="step-num-badge">03</span>
                     </div>
-                    <h5 class="fw-bold">3. Enjoy Full Warranty</h5>
-                    <p class="text-muted small">
-                        Instantly obtain your digital warranty certificate with hassle-free replacement service.
+                    <h5 class="fw-bold text-dark mb-2">Enjoy Guaranteed Coverage</h5>
+                    <p class="text-muted small mb-0 lh-base">
+                        Instantly access and print your official digital warranty certificate with seamless replacement support.
                     </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Enterprise Feature Highlights: Unlimited Replacement Chains -->
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container py-4">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #059669; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.45rem 1rem; border-radius: 9999px;">
+                    Exclusive Architecture
+                </span>
+                <h2 class="display-6 fw-extrabold text-dark mt-3 mb-3" style="letter-spacing: -0.03em;">
+                    Unlimited Replacement Chain Resolution
+                </h2>
+                <p class="text-muted mb-4" style="line-height: 1.7;">
+                    Standard warranty tools lose customer history when equipment is swapped. Fuzura uses graph traversal algorithms to link every serial back to the original tax invoice.
+                </p>
+                
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center text-primary" style="width: 32px; height: 32px; background: #eef2ff; flex-shrink: 0;">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <div>
+                            <strong class="text-dark d-block">Search Any Serial in the Chain</strong>
+                            <span class="text-muted small">Searching an old replaced serial automatically reveals the full history and identifies the currently active unit.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center text-success" style="width: 32px; height: 32px; background: #ecfdf5; flex-shrink: 0;">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div>
+                            <strong class="text-dark d-block">Zero Lost Coverage Days</strong>
+                            <span class="text-muted small">Warranty expiration date is strictly preserved from the root purchase, ensuring zero warranty disputes.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="p-4 rounded-4" style="background: #0f172a; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-white small fw-bold"><i class="fas fa-network-wired text-primary me-2"></i>Multi-Level Tree Simulator</span>
+                        <span class="badge bg-success font-mono">100% Chain Integrity</span>
+                    </div>
+                    
+                    <div class="timeline-container">
+                        <div class="timeline-node">
+                            <div class="timeline-marker" style="width: 32px; height: 32px; left: -2.75rem; font-size: 0.75rem;">0</div>
+                            <div class="p-2.5 rounded-3" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);">
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-bold text-white font-mono small">FZ-SN-1001</span>
+                                    <span class="badge bg-secondary" style="font-size: 0.65rem;">Original Sale</span>
+                                </div>
+                                <small class="text-muted d-block" style="font-size: 0.72rem;">Customer: John Doe • Dealer: Apex Electronics</small>
+                            </div>
+                        </div>
+
+                        <div class="timeline-node">
+                            <div class="timeline-marker" style="width: 32px; height: 32px; left: -2.75rem; font-size: 0.75rem;">1</div>
+                            <div class="p-2.5 rounded-3" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);">
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-bold text-white font-mono small">FZ-SN-1002</span>
+                                    <span class="badge bg-warning text-dark" style="font-size: 0.65rem;">Replacement #1</span>
+                                </div>
+                                <small class="text-muted d-block" style="font-size: 0.72rem;">Replaced: Screen Flickering</small>
+                            </div>
+                        </div>
+
+                        <div class="timeline-node active-unit mb-0">
+                            <div class="timeline-marker" style="width: 32px; height: 32px; left: -2.75rem; font-size: 0.75rem;"><i class="fas fa-check"></i></div>
+                            <div class="p-2.5 rounded-3" style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.4);">
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-bold text-white font-mono small">FZ-SN-1004</span>
+                                    <span class="badge bg-success" style="font-size: 0.65rem;">Active In-Use Unit</span>
+                                </div>
+                                <small class="text-success d-block" style="font-size: 0.72rem;">Full Warranty In Force • Valid till 2027</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -145,19 +301,30 @@
 </section>
 
 <!-- Call to Action Banner -->
-<section class="py-5 bg-light">
+<section class="py-5" style="background-color: #f8fafc;">
     <div class="container py-3">
-        <div class="card border-0 rounded-4 shadow-sm p-4 p-md-5" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
-            <div class="row align-items-center g-4 text-white">
+        <div class="cta-cosmic-card p-4 p-md-5">
+            <div class="row align-items-center g-4 text-white position-relative" style="z-index: 2;">
                 <div class="col-lg-8">
-                    <h3 class="fw-bold mb-2">Have you purchased a new product recently?</h3>
-                    <p class="text-light text-opacity-75 mb-0">
-                        Create an account or login to activate your manufacturer warranty coverage and track your device lifecycle.
+                    <span class="badge mb-2" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #93c5fd; font-size: 0.75rem; font-weight: 600;">
+                        INSTANT ACTIVATION
+                    </span>
+                    <h3 class="display-6 fw-extrabold mb-2" style="letter-spacing: -0.03em;">
+                        Have you purchased a new Fuzura product?
+                    </h3>
+                    <p class="mb-0 text-slate-300" style="color: #cbd5e1; font-size: 1.05rem;">
+                        Create your verified account in 30 seconds to activate manufacturer warranty coverage and track your complete hardware lifecycle.
                     </p>
                 </div>
                 <div class="col-lg-4 text-lg-end">
-                    <a href="{{ route('customer.register') }}" class="btn btn-primary-custom px-4 py-2 me-2">Register Product</a>
-                    <a href="{{ route('customer.login') }}" class="btn btn-outline-light px-4 py-2">Customer Login</a>
+                    <div class="d-flex flex-column flex-sm-row justify-content-lg-end gap-2">
+                        <a href="{{ route('customer.register') }}" class="btn btn-primary-custom px-4 py-2.5">
+                            <i class="fas fa-plus-circle me-1"></i> Register Product
+                        </a>
+                        <a href="{{ route('customer.login') }}" class="btn btn-glass px-4 py-2.5">
+                            Customer Portal
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,67 @@
+@extends('layouts.public')
+
+@section('title', 'Customer Sign Up - Fuzura')
+
+@section('content')
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card border-0 rounded-4 shadow-sm p-4 p-md-5 bg-white">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex p-3 rounded-circle bg-success-subtle text-success mb-2">
+                        <i class="fas fa-user-plus fs-2"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark mb-1">Create Customer Account</h3>
+                    <p class="text-muted small">Register to protect your devices with official warranty coverage.</p>
+                </div>
+
+                <form action="{{ route('customer.register.post') }}" method="POST">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label fw-semibold small text-muted">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="John Doe" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="john@example.com" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted">Mobile Number <span class="text-danger">*</span></label>
+                            <input type="text" name="mobile" class="form-control" value="{{ old('mobile') }}" placeholder="+1-555-0199" required>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold small text-muted">Mailing / Delivery Address</label>
+                            <textarea name="address" rows="2" class="form-control" placeholder="Street Address, City, State, ZIP...">{{ old('address') }}</textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted">Password <span class="text-danger">*</span></label>
+                            <input type="password" name="password" class="form-control" placeholder="Min. 6 characters" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted">Confirm Password <span class="text-danger">*</span></label>
+                            <input type="password" name="password_confirmation" class="form-control" placeholder="Re-type password" required>
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-primary-custom w-100 py-2 fs-6">
+                                <i class="fas fa-check-circle me-2"></i> Register Account
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="mt-4 text-center small text-muted">
+                    Already have an account? 
+                    <a href="{{ route('customer.login') }}" class="fw-bold text-decoration-none">Sign In Here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

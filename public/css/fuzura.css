@@ -1,0 +1,384 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --fz-primary: #4f46e5;
+    --fz-primary-hover: #4338ca;
+    --fz-primary-light: #eef2ff;
+    --fz-secondary: #0ea5e9;
+    --fz-success: #10b981;
+    --fz-warning: #f59e0b;
+    --fz-danger: #ef4444;
+    --fz-dark: #0f172a;
+    --fz-dark-surface: #1e293b;
+    --fz-border: #e2e8f0;
+    --fz-bg-light: #f8fafc;
+    --fz-sidebar-width: 260px;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--fz-bg-light);
+    color: #334155;
+    overflow-x: hidden;
+}
+
+/* ==========================================================================
+   Admin & Customer Portal Layout
+   ========================================================================== */
+
+.app-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.app-sidebar {
+    width: var(--fz-sidebar-width);
+    background: #0f172a;
+    color: #94a3b8;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar-brand {
+    padding: 1.5rem 1.25rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-brand i {
+    color: #6366f1;
+    font-size: 1.5rem;
+}
+
+.sidebar-nav {
+    padding: 1rem 0;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.nav-category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    padding: 0.8rem 1.25rem 0.4rem;
+}
+
+.nav-link-custom {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1.25rem;
+    color: #94a3b8;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.92rem;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.nav-link-custom:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link-custom.active {
+    color: #fff;
+    background: rgba(99, 102, 241, 0.15);
+    border-left-color: #6366f1;
+    font-weight: 600;
+}
+
+.nav-link-custom i {
+    font-size: 1.15rem;
+    width: 22px;
+    text-align: center;
+}
+
+.app-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.app-topbar {
+    height: 70px;
+    background: #fff;
+    border-bottom: 1px solid var(--fz-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.75rem;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+.app-content {
+    padding: 2rem 1.75rem;
+    flex-grow: 1;
+}
+
+/* Sidebar responsive toggle */
+@media (max-width: 991.98px) {
+    .app-sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -100%;
+    }
+    .app-sidebar.show {
+        left: 0;
+    }
+    .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+    }
+    .sidebar-backdrop.show {
+        display: block;
+    }
+}
+
+/* ==========================================================================
+   Dashboard Cards & Metrics
+   ========================================================================== */
+
+.metric-card {
+    background: #fff;
+    border-radius: 1rem;
+    border: 1px solid var(--fz-border);
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+.metric-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+}
+
+.metric-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.metric-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+    margin-top: 0.35rem;
+}
+
+/* ==========================================================================
+   Replacement Timeline Component
+   ========================================================================== */
+
+.timeline-container {
+    position: relative;
+    padding-left: 2.5rem;
+}
+
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    bottom: 15px;
+    left: 17px;
+    width: 2px;
+    background: #cbd5e1;
+}
+
+.timeline-node {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.timeline-node:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -2.5rem;
+    top: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--fz-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--fz-primary);
+    box-shadow: 0 0 0 4px #fff;
+    z-index: 2;
+}
+
+.timeline-node.active-unit .timeline-marker {
+    background: var(--fz-success);
+    border-color: var(--fz-success);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+}
+
+.timeline-node.searched-unit .timeline-marker {
+    box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.3);
+}
+
+.timeline-card {
+    background: #fff;
+    border: 1px solid var(--fz-border);
+    border-radius: 0.85rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.timeline-node.active-unit .timeline-card {
+    border-color: #a7f3d0;
+    background: linear-gradient(to bottom, #ffffff, #f0fdf4);
+}
+
+.timeline-node.searched-unit .timeline-card {
+    border-color: #c7d2fe;
+}
+
+/* ==========================================================================
+   Badges, Tables, Forms & General Styles
+   ========================================================================== */
+
+.badge-soft-success {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-soft-danger {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-soft-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badge-soft-primary {
+    background-color: #e0e7ff;
+    color: #3730a3;
+}
+
+.badge-soft-secondary {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.table-custom th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--fz-border);
+    padding: 0.85rem 1rem;
+}
+
+.table-custom td {
+    padding: 0.95rem 1rem;
+    vertical-align: middle;
+    font-size: 0.92rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.btn-primary-custom {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+    color: #fff;
+    border: none;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.55rem 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.btn-primary-custom:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+/* ==========================================================================
+   Print Warranty Certificate Styling
+   ========================================================================== */
+
+.certificate-frame {
+    background: #fff;
+    border: 12px double #1e293b;
+    padding: 3rem;
+    max-width: 850px;
+    margin: 0 auto;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.certificate-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 6rem;
+    font-weight: 900;
+    color: rgba(79, 70, 229, 0.04);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .certificate-frame, .certificate-frame * {
+        visibility: visible;
+    }
+    .certificate-frame {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        border: 4px double #000;
+        box-shadow: none;
+        padding: 2rem;
+    }
+    .no-print {
+        display: none !important;
+    }
+}

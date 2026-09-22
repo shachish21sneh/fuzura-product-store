@@ -13,8 +13,8 @@
     <!-- Custom Theme CSS -->
     <link rel="stylesheet" href="{{ asset('css/fuzura.css') }}">
 </head>
-<body class="d-flex align-items-center justify-content-center min-vh-100 hero-cosmic">
-    <div class="container py-5">
+<body class="d-flex flex-column min-vh-100 hero-cosmic" style="overflow-y: auto; overflow-x: hidden;">
+    <div class="container py-4 py-md-5 my-auto">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-5">
                 <div class="card border-0 rounded-4 shadow-lg overflow-hidden bg-white" style="box-shadow: 0 25px 60px -15px rgba(0,0,0,0.5) !important;">

@@ -125,6 +125,13 @@ body {
     overflow: hidden;
 }
 
+body.hero-cosmic {
+    overflow-x: hidden;
+    overflow-y: auto !important;
+    min-height: 100vh;
+    background-attachment: fixed;
+}
+
 .hero-cosmic::before {
     content: '';
     position: absolute;
@@ -133,6 +140,10 @@ body {
     background-size: 32px 32px;
     pointer-events: none;
     opacity: 0.65;
+}
+
+body.hero-cosmic::before {
+    position: fixed;
 }
 
 .hero-pill-badge {

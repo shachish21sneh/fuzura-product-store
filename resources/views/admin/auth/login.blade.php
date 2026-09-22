@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: auto; min-height: 100%;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +10,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Custom Theme CSS -->
-    <link rel="stylesheet" href="{{ asset('css/fuzura.css') }}">
+    <!-- Custom Theme CSS with Cache Buster -->
+    <link rel="stylesheet" href="{{ asset('css/fuzura.css') }}?v={{ file_exists(public_path('css/fuzura.css')) ? filemtime(public_path('css/fuzura.css')) : time() }}">
 </head>
-<body class="d-flex flex-column min-vh-100 hero-cosmic" style="overflow-y: auto; overflow-x: hidden;">
+<body class="d-flex flex-column min-vh-100 hero-cosmic" style="overflow-y: auto !important; overflow-x: hidden !important; min-height: 100vh; height: auto;">
     <div class="container py-4 py-md-5 my-auto">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-5">

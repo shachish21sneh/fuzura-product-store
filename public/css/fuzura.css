@@ -122,13 +122,14 @@ body {
         radial-gradient(circle at 50% 85%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
         var(--fz-dark-canvas);
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 body.hero-cosmic {
-    overflow-x: hidden;
+    overflow-x: hidden !important;
     overflow-y: auto !important;
     min-height: 100vh;
+    height: auto !important;
     background-attachment: fixed;
 }
 

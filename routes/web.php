@@ -29,6 +29,29 @@ Route::post('/contact/send', [PublicController::class, 'sendContact'])->name('pu
 
 /*
 |--------------------------------------------------------------------------
+| One-Click Live Production Deployment Sync
+|--------------------------------------------------------------------------
+*/
+Route::get('/deploy-sync', function (\Illuminate\Http\Request $request) {
+    if ($request->query('key') !== 'fuzura2026') {
+        abort(403, 'Unauthorized deployment key.');
+    }
+    $outputs = [];
+    $commands = [
+        'git fetch origin main 2>&1',
+        'git reset --hard origin/main 2>&1',
+        'php artisan view:clear 2>&1',
+        'php artisan config:clear 2>&1',
+        'php artisan route:clear 2>&1',
+    ];
+    foreach ($commands as $cmd) {
+        $outputs[] = "$ " . $cmd . "\n" . shell_exec($cmd);
+    }
+    return response('<pre style="background:#0f172a;color:#38bdf8;padding:25px;border-radius:12px;font-family:monospace;font-size:14px;line-height:1.6;">' . implode("\n", $outputs) . '</pre>');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Customer Authentication Routes
 |--------------------------------------------------------------------------
 */

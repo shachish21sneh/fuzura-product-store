@@ -219,8 +219,20 @@
                                         <span class="font-monospace fw-bold text-dark d-block">{{ $sale->product_serial_number }}</span>
                                         <small class="text-muted">{{ $sale->product_model }}</small>
                                     </td>
-                                    <td>{{ $sale->dealer_name }}</td>
-                                    <td>{{ $sale->customer_name }}</td>
+                                    <td>
+                                        @if ($sale->dealer_name)
+                                            <span class="fw-medium text-dark"><i class="fas fa-store text-muted me-1 small"></i>{{ $sale->dealer_name }}</span>
+                                        @else
+                                            <span class="text-muted small fst-italic">None</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($sale->customer_name)
+                                            <span class="fw-medium text-dark"><i class="fas fa-user text-muted me-1 small"></i>{{ $sale->customer_name }}</span>
+                                        @else
+                                            <span class="text-muted small fst-italic">None</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $sale->bill_date->format('d M, Y') }}</td>
                                 </tr>
                             @empty

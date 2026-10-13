@@ -138,21 +138,30 @@
 
                     <!-- Customer & Dealer Card -->
                     <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-                        <h6 class="fw-bold text-dark mb-3"><i class="fas fa-user-tag text-success me-2"></i> Sale & Customer Info</h6>
+                        <h6 class="fw-bold text-dark mb-3"><i class="fas fa-user-tag text-success me-2"></i> Sale & Assignment Info</h6>
                         @if ($result['sale'])
                             <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
-                                <li class="d-flex justify-content-between">
-                                    <span class="text-muted">Customer:</span>
-                                    <span class="fw-semibold text-dark">{{ $result['sale']->customer_name }}</span>
-                                </li>
-                                <li class="d-flex justify-content-between">
-                                    <span class="text-muted">Mobile:</span>
-                                    <span class="fw-semibold text-dark">{{ $result['sale']->customer_mobile }}</span>
+                                <li class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted">Assigned To:</span>
+                                    @php $badge = $result['sale']->assignment_badge; @endphp
+                                    <span class="badge {{ $badge['class'] }} py-1 px-2">
+                                        <i class="{{ $badge['icon'] }} me-1"></i>{{ $badge['label'] }}
+                                    </span>
                                 </li>
                                 <li class="d-flex justify-content-between">
                                     <span class="text-muted">Dealer:</span>
-                                    <span class="fw-semibold text-dark">{{ $result['sale']->dealer_name }}</span>
+                                    <span class="fw-semibold text-dark">{{ $result['sale']->dealer_name ?? 'Not Assigned' }}</span>
                                 </li>
+                                <li class="d-flex justify-content-between">
+                                    <span class="text-muted">Customer:</span>
+                                    <span class="fw-semibold text-dark">{{ $result['sale']->customer_name ?? 'Not Assigned' }}</span>
+                                </li>
+                                @if ($result['sale']->customer_mobile)
+                                    <li class="d-flex justify-content-between">
+                                        <span class="text-muted">Customer Mobile:</span>
+                                        <span class="fw-semibold text-dark">{{ $result['sale']->customer_mobile }}</span>
+                                    </li>
+                                @endif
                                 <li class="d-flex justify-content-between">
                                     <span class="text-muted">Invoice #:</span>
                                     <span class="fw-semibold font-monospace">{{ $result['sale']->invoice_number ?? 'N/A' }}</span>

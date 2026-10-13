@@ -75,9 +75,9 @@
                                 <td>{{ $r->bill_date->format('d M, Y') }}</td>
                                 <td class="font-monospace fw-bold text-dark">{{ $r->product_serial_number }}</td>
                                 <td><span class="badge bg-primary-subtle text-primary">{{ $r->product_model }}</span></td>
-                                <td>{{ $r->dealer_name }}</td>
-                                <td>{{ $r->customer_name }}</td>
-                                <td>{{ $r->customer_mobile }}</td>
+                                <td>{{ $r->dealer_name ?? '—' }}</td>
+                                <td>{{ $r->customer_name ?? '—' }}</td>
+                                <td>{{ $r->customer_mobile ?? '—' }}</td>
                                 <td><span class="font-monospace text-muted">{{ $r->invoice_number ?? 'N/A' }}</span></td>
                             </tr>
                         @empty

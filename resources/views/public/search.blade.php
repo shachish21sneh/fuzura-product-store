@@ -174,8 +174,8 @@
                             @if ($result['sale'])
                                 <ul class="list-unstyled small d-flex flex-column gap-2.5 mb-0">
                                     <li class="d-flex justify-content-between">
-                                        <span class="text-muted">Dealer Name:</span>
-                                        <span class="fw-bold text-dark">{{ $result['sale']->dealer_name }}</span>
+                                        <span class="text-muted">Dealer / Channel:</span>
+                                        <span class="fw-bold text-dark">{{ $result['sale']->dealer_name ?? 'Direct Sale / Factory Outlet' }}</span>
                                     </li>
                                     <li class="d-flex justify-content-between">
                                         <span class="text-muted">Bill Date:</span>

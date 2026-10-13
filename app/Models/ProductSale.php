@@ -14,6 +14,7 @@ class ProductSale extends Model
         'product_model',
         'product_serial_number',
         'bill_date',
+        'assigned_to',
         'dealer_name',
         'dealer_address',
         'customer_name',
@@ -21,6 +22,52 @@ class ProductSale extends Model
         'customer_address',
         'invoice_number',
     ];
+
+    public function isAssignedToDealer(): bool
+    {
+        return !empty($this->dealer_name);
+    }
+
+    public function isAssignedToCustomer(): bool
+    {
+        return !empty($this->customer_name);
+    }
+
+    public function getAssignmentBadgeAttribute(): array
+    {
+        $hasDealer = !empty($this->dealer_name);
+        $hasCustomer = !empty($this->customer_name);
+
+        if ($hasDealer && $hasCustomer) {
+            return [
+                'type' => 'both',
+                'label' => 'Dealer & Customer',
+                'class' => 'bg-info-subtle text-info border border-info border-opacity-25',
+                'icon' => 'fas fa-users',
+            ];
+        } elseif ($hasDealer) {
+            return [
+                'type' => 'dealer',
+                'label' => 'Dealer Only',
+                'class' => 'bg-primary-subtle text-primary border border-primary border-opacity-25',
+                'icon' => 'fas fa-store',
+            ];
+        } elseif ($hasCustomer) {
+            return [
+                'type' => 'customer',
+                'label' => 'Customer Only',
+                'class' => 'bg-success-subtle text-success border border-success border-opacity-25',
+                'icon' => 'fas fa-user',
+            ];
+        }
+
+        return [
+            'type' => 'none',
+            'label' => 'Unassigned',
+            'class' => 'bg-secondary-subtle text-secondary border',
+            'icon' => 'fas fa-question-circle',
+        ];
+    }
 
     protected $casts = [
         'bill_date' => 'date',

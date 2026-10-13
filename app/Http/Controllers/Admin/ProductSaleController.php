@@ -35,6 +35,28 @@ class ProductSaleController extends Controller
             $query->whereDate('bill_date', '<=', $request->to_date);
         }
 
+        if ($request->filled('assigned_to')) {
+            $type = $request->assigned_to;
+            if ($type === 'dealer') {
+                $query->whereNotNull('dealer_name')
+                      ->where('dealer_name', '!=', '')
+                      ->where(function ($q) {
+                          $q->whereNull('customer_name')->orWhere('customer_name', '');
+                      });
+            } elseif ($type === 'customer') {
+                $query->whereNotNull('customer_name')
+                      ->where('customer_name', '!=', '')
+                      ->where(function ($q) {
+                          $q->whereNull('dealer_name')->orWhere('dealer_name', '');
+                      });
+            } elseif ($type === 'both') {
+                $query->whereNotNull('dealer_name')
+                      ->where('dealer_name', '!=', '')
+                      ->whereNotNull('customer_name')
+                      ->where('customer_name', '!=', '');
+            }
+        }
+
         $sales = $query->latest('bill_date')->paginate(15)->withQueryString();
         $availableProducts = Product::available()->get();
 
@@ -43,16 +65,50 @@ class ProductSaleController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $assignDealer = $request->boolean('assign_dealer');
+        $assignCustomer = $request->boolean('assign_customer');
+
+        // Fallback for legacy requests without explicit checkbox flags
+        if (!$request->has('assign_dealer') && !$request->has('assign_customer')) {
+            $assignDealer = $request->filled('dealer_name');
+            $assignCustomer = $request->filled('customer_name') || $request->filled('customer_mobile');
+        }
+
+        if (!$assignDealer && !$assignCustomer) {
+            $msg = 'Please select at least one recipient: Dealer and/or Customer.';
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $msg, 'errors' => ['assign_dealer' => [$msg]]], 422);
+            }
+            return back()->withErrors(['assign_dealer' => $msg])->withInput();
+        }
+
+        $rules = [
             'product_serial_number' => 'required|string|exists:products,serial_number',
             'bill_date' => 'required|date',
-            'dealer_name' => 'required|string|max:150',
-            'dealer_address' => 'nullable|string|max:500',
-            'customer_name' => 'required|string|max:150',
-            'customer_mobile' => 'required|string|max:20',
-            'customer_address' => 'nullable|string|max:500',
             'invoice_number' => 'nullable|string|max:100',
-        ]);
+            'assign_dealer' => 'nullable',
+            'assign_customer' => 'nullable',
+        ];
+
+        if ($assignDealer) {
+            $rules['dealer_name'] = 'required|string|max:150';
+            $rules['dealer_address'] = 'nullable|string|max:500';
+        } else {
+            $rules['dealer_name'] = 'nullable|string|max:150';
+            $rules['dealer_address'] = 'nullable|string|max:500';
+        }
+
+        if ($assignCustomer) {
+            $rules['customer_name'] = 'required|string|max:150';
+            $rules['customer_mobile'] = 'required|string|max:20';
+            $rules['customer_address'] = 'nullable|string|max:500';
+        } else {
+            $rules['customer_name'] = 'nullable|string|max:150';
+            $rules['customer_mobile'] = 'nullable|string|max:20';
+            $rules['customer_address'] = 'nullable|string|max:500';
+        }
+
+        $validated = $request->validate($rules);
 
         $product = Product::where('serial_number', $validated['product_serial_number'])->firstOrFail();
 
@@ -65,24 +121,34 @@ class ProductSaleController extends Controller
             return back()->with('error', $msg);
         }
 
-        DB::transaction(function () use ($validated, $product, &$sale) {
+        $assignedTo = ($assignDealer && $assignCustomer) ? 'both' : ($assignDealer ? 'dealer' : 'customer');
+
+        DB::transaction(function () use ($validated, $product, $assignDealer, $assignCustomer, $assignedTo, &$sale) {
             $sale = ProductSale::create([
                 'product_id' => $product->id,
                 'product_model' => $product->model_number,
                 'product_serial_number' => $product->serial_number,
                 'bill_date' => $validated['bill_date'],
-                'dealer_name' => $validated['dealer_name'],
-                'dealer_address' => $validated['dealer_address'] ?? null,
-                'customer_name' => $validated['customer_name'],
-                'customer_mobile' => $validated['customer_mobile'],
-                'customer_address' => $validated['customer_address'] ?? null,
+                'assigned_to' => $assignedTo,
+                'dealer_name' => $assignDealer ? $validated['dealer_name'] : null,
+                'dealer_address' => $assignDealer ? ($validated['dealer_address'] ?? null) : null,
+                'customer_name' => $assignCustomer ? $validated['customer_name'] : null,
+                'customer_mobile' => $assignCustomer ? $validated['customer_mobile'] : null,
+                'customer_address' => $assignCustomer ? ($validated['customer_address'] ?? null) : null,
                 'invoice_number' => $validated['invoice_number'] ?? null,
             ]);
 
             // Update product status to sold
             $product->update(['status' => 'sold']);
 
-            ActivityLog::record('RECORD_SALE', "Recorded sale for serial {$product->serial_number} to {$sale->customer_name}", $sale->toArray());
+            $targetDesc = match ($assignedTo) {
+                'both' => "to Dealer ({$sale->dealer_name}) & Customer ({$sale->customer_name})",
+                'dealer' => "to Dealer ({$sale->dealer_name})",
+                'customer' => "to Customer ({$sale->customer_name})",
+                default => "",
+            };
+
+            ActivityLog::record('RECORD_SALE', "Recorded sale for serial {$product->serial_number} {$targetDesc}", $sale->toArray());
         });
 
         if ($request->ajax() || $request->wantsJson()) {

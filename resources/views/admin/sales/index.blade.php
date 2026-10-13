@@ -20,7 +20,7 @@
 
         <!-- Filter Form -->
         <form action="{{ route('admin.sales.index') }}" method="GET" class="row g-3 mt-2 pt-3 border-top">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="input-group">
                     <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-search"></i></span>
                     <input type="text" name="search" class="form-control border-start-0 ps-0" 
@@ -28,7 +28,16 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
+                <select name="assigned_to" class="form-select" title="Filter by Recipient">
+                    <option value="">All Assignments</option>
+                    <option value="both" {{ request('assigned_to') === 'both' ? 'selected' : '' }}>Dealer & Customer</option>
+                    <option value="dealer" {{ request('assigned_to') === 'dealer' ? 'selected' : '' }}>Dealer Only</option>
+                    <option value="customer" {{ request('assigned_to') === 'customer' ? 'selected' : '' }}>Customer Only</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
                 <input type="date" name="from_date" class="form-control" value="{{ request('from_date') }}" title="From Date">
             </div>
 
@@ -51,7 +60,7 @@
                     <tr>
                         <th>Invoice / Bill Date</th>
                         <th>Product Serial</th>
-                        <th>Model</th>
+                        <th>Model & Assignment</th>
                         <th>Dealer Name</th>
                         <th>Customer Info</th>
                         <th>Replacements</th>
@@ -74,15 +83,31 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="badge bg-primary-subtle text-primary fw-semibold">{{ $sale->product_model }}</span>
+                                <div>
+                                    <span class="badge bg-primary-subtle text-primary fw-semibold">{{ $sale->product_model }}</span>
+                                </div>
+                                <div class="mt-1">
+                                    @php $badge = $sale->assignment_badge; @endphp
+                                    <span class="badge {{ $badge['class'] }}" style="font-size: 0.72rem;">
+                                        <i class="{{ $badge['icon'] }} me-1"></i>{{ $badge['label'] }}
+                                    </span>
+                                </div>
                             </td>
                             <td>
-                                <div class="fw-medium text-dark">{{ $sale->dealer_name }}</div>
-                                <small class="text-muted d-block text-truncate" style="max-width: 150px;">{{ $sale->dealer_address ?? 'Address N/A' }}</small>
+                                @if ($sale->dealer_name)
+                                    <div class="fw-medium text-dark"><i class="fas fa-store text-muted me-1 small"></i>{{ $sale->dealer_name }}</div>
+                                    <small class="text-muted d-block text-truncate" style="max-width: 160px;">{{ $sale->dealer_address ?? 'Address N/A' }}</small>
+                                @else
+                                    <span class="badge bg-light text-muted border"><i class="fas fa-minus me-1"></i>Not Assigned</span>
+                                @endif
                             </td>
                             <td>
-                                <div class="fw-semibold text-dark">{{ $sale->customer_name }}</div>
-                                <small class="text-muted"><i class="fas fa-phone-alt me-1" style="font-size: 0.7rem;"></i>{{ $sale->customer_mobile }}</small>
+                                @if ($sale->customer_name)
+                                    <div class="fw-semibold text-dark"><i class="fas fa-user text-muted me-1 small"></i>{{ $sale->customer_name }}</div>
+                                    <small class="text-muted"><i class="fas fa-phone-alt me-1" style="font-size: 0.7rem;"></i>{{ $sale->customer_mobile ?? 'No Mobile' }}</small>
+                                @else
+                                    <span class="badge bg-light text-muted border"><i class="fas fa-minus me-1"></i>Not Assigned</span>
+                                @endif
                             </td>
                             <td>
                                 @if ($sale->replacements->count() > 0)
@@ -97,7 +122,7 @@
                                 <div class="d-flex justify-content-end gap-1">
                                     <!-- Replace Product Trigger Button (Every Sale Row) -->
                                     <button type="button" class="btn btn-sm btn-warning fw-bold px-2 py-1" 
-                                            onclick="openReplacementModal({{ $sale->id }}, '{{ $sale->product_serial_number }}', '{{ $sale->dealer_name }}', '{{ $sale->customer_name }}')">
+                                            onclick="openReplacementModal({{ $sale->id }}, '{{ $sale->product_serial_number }}', '{{ addslashes($sale->dealer_name ?? '') }}', '{{ addslashes($sale->customer_name ?? '') }}')">
                                         <i class="fas fa-repeat me-1"></i> Replace
                                     </button>
 
@@ -159,7 +184,7 @@
                 <h5 class="modal-title fw-bold"><i class="fas fa-cart-plus text-primary me-2"></i> Record Product Sale</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('admin.sales.store') }}" method="POST">
+            <form action="{{ route('admin.sales.store') }}" method="POST" id="recordSaleForm">
                 @csrf
                 <div class="modal-body p-4">
                     <div class="row g-3">
@@ -188,27 +213,82 @@
                             <input type="text" name="invoice_number" class="form-control" placeholder="e.g. INV-2026-0012">
                         </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Dealer Name <span class="text-danger">*</span></label>
-                            <input type="text" name="dealer_name" class="form-control" placeholder="e.g. Apex Electronics Mart" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Dealer Address</label>
-                            <input type="text" name="dealer_address" class="form-control" placeholder="e.g. 100 Commercial Blvd, City">
+                        <!-- Sale Assignment Checkboxes (Dealer / Customer) -->
+                        <div class="col-12">
+                            <label class="form-label fw-bold text-dark small mb-2 d-flex align-items-center justify-content-between">
+                                <span><i class="fas fa-user-tag text-primary me-1"></i> Assign Product Sale To: <span class="text-danger">*</span></span>
+                                <span class="text-muted fw-normal" style="font-size: 0.8rem;">Select Dealer, Customer, or both</span>
+                            </label>
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 bg-light rounded-3 border">
+                                <div class="d-flex align-items-center gap-4">
+                                    <div class="form-check form-check-inline mb-0">
+                                        <input class="form-check-input" type="checkbox" id="assignDealerCheckbox" name="assign_dealer" value="1" checked>
+                                        <label class="form-check-label fw-bold text-dark user-select-none" for="assignDealerCheckbox" style="cursor: pointer;">
+                                            <i class="fas fa-store text-primary me-1"></i> Dealer
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline mb-0">
+                                        <input class="form-check-input" type="checkbox" id="assignCustomerCheckbox" name="assign_customer" value="1">
+                                        <label class="form-check-label fw-bold text-dark user-select-none" for="assignCustomerCheckbox" style="cursor: pointer;">
+                                            <i class="fas fa-user text-primary me-1"></i> Customer
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="assignmentStatusBadge">
+                                    <span class="badge bg-primary-subtle text-primary border border-primary border-opacity-25 px-2.5 py-1.5">
+                                        <i class="fas fa-store me-1"></i> Dealer Only
+                                    </span>
+                                </div>
+                            </div>
+                            <div id="assignmentErrorAlert" class="alert alert-danger py-2 px-3 mt-2 small d-none" role="alert">
+                                <i class="fas fa-exclamation-triangle me-1"></i> Please check at least one recipient (Dealer or Customer) before saving.
+                            </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Customer Full Name <span class="text-danger">*</span></label>
-                            <input type="text" name="customer_name" class="form-control" placeholder="e.g. Robert Johnson" required>
+                        <!-- Dealer Details Section (Visible when Dealer checkbox is selected) -->
+                        <div class="col-12" id="dealerDetailsSection">
+                            <div class="p-3 rounded-3 border bg-white shadow-xs">
+                                <div class="fw-bold text-dark small mb-3 pb-2 border-bottom d-flex align-items-center justify-content-between">
+                                    <span><i class="fas fa-store text-primary me-2"></i> Dealer Information</span>
+                                    <span class="badge bg-primary-subtle text-primary small">Active</span>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small">Dealer Name <span class="text-danger">*</span></label>
+                                        <input type="text" name="dealer_name" id="saleDealerNameInput" class="form-control" placeholder="e.g. Apex Electronics Mart" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small">Dealer Address</label>
+                                        <input type="text" name="dealer_address" id="saleDealerAddressInput" class="form-control" placeholder="e.g. 100 Commercial Blvd, City">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Customer Mobile <span class="text-danger">*</span></label>
-                            <input type="text" name="customer_mobile" class="form-control" placeholder="e.g. +1-555-0922" required>
+
+                        <!-- Customer Details Section (Visible when Customer checkbox is selected) -->
+                        <div class="col-12" id="customerDetailsSection" style="display: none;">
+                            <div class="p-3 rounded-3 border bg-white shadow-xs">
+                                <div class="fw-bold text-dark small mb-3 pb-2 border-bottom d-flex align-items-center justify-content-between">
+                                    <span><i class="fas fa-user text-primary me-2"></i> Customer Information</span>
+                                    <span class="badge bg-success-subtle text-success small">Active</span>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small">Customer Full Name <span class="text-danger">*</span></label>
+                                        <input type="text" name="customer_name" id="saleCustomerNameInput" class="form-control" placeholder="e.g. Robert Johnson">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small">Customer Mobile <span class="text-danger">*</span></label>
+                                        <input type="text" name="customer_mobile" id="saleCustomerMobileInput" class="form-control" placeholder="e.g. +1-555-0922">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-semibold small">Customer Address</label>
+                                        <textarea name="customer_address" id="saleCustomerAddressInput" rows="2" class="form-control" placeholder="e.g. 450 North Hill Road, Suite 2A..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-12">
-                            <label class="form-label fw-semibold small">Customer Address</label>
-                            <textarea name="customer_address" rows="2" class="form-control" placeholder="e.g. 450 North Hill Road, Suite 2A..."></textarea>
-                        </div>
+
                     </div>
                 </div>
                 <div class="modal-footer bg-light">
@@ -240,7 +320,7 @@
                                 <input type="hidden" name="old_serial_number" id="repOldSerialInput">
                             </div>
                             <div class="col-6">
-                                <span class="text-muted d-block">Customer:</span>
+                                <span class="text-muted d-block">Customer / Recipient:</span>
                                 <span class="fw-semibold text-dark" id="repCustomerDisplay"></span>
                             </div>
                         </div>
@@ -289,14 +369,78 @@ $(document).ready(function() {
         const model = selected.data('model');
         $('#saleModelDisplay').val(model || '');
     });
+
+    // Handle Assignment Checkboxes (Dealer vs Customer vs Both)
+    function updateSaleAssignmentState() {
+        const dealerChecked = $('#assignDealerCheckbox').is(':checked');
+        const customerChecked = $('#assignCustomerCheckbox').is(':checked');
+
+        // Toggle Dealer Details Section
+        if (dealerChecked) {
+            $('#dealerDetailsSection').slideDown(200);
+            $('#saleDealerNameInput').prop('required', true);
+        } else {
+            $('#dealerDetailsSection').slideUp(200);
+            $('#saleDealerNameInput').prop('required', false);
+        }
+
+        // Toggle Customer Details Section
+        if (customerChecked) {
+            $('#customerDetailsSection').slideDown(200);
+            $('#saleCustomerNameInput').prop('required', true);
+            $('#saleCustomerMobileInput').prop('required', true);
+        } else {
+            $('#customerDetailsSection').slideUp(200);
+            $('#saleCustomerNameInput').prop('required', false);
+            $('#saleCustomerMobileInput').prop('required', false);
+        }
+
+        // Update Badge and Error status
+        if (!dealerChecked && !customerChecked) {
+            $('#assignmentErrorAlert').removeClass('d-none');
+            $('#assignmentStatusBadge').html('<span class="badge bg-danger-subtle text-danger border border-danger border-opacity-25 px-2.5 py-1.5"><i class="fas fa-triangle-exclamation me-1"></i> None Selected</span>');
+        } else {
+            $('#assignmentErrorAlert').addClass('d-none');
+            if (dealerChecked && customerChecked) {
+                $('#assignmentStatusBadge').html('<span class="badge bg-info-subtle text-info border border-info border-opacity-25 px-2.5 py-1.5"><i class="fas fa-users me-1"></i> Dealer & Customer</span>');
+            } else if (dealerChecked) {
+                $('#assignmentStatusBadge').html('<span class="badge bg-primary-subtle text-primary border border-primary border-opacity-25 px-2.5 py-1.5"><i class="fas fa-store me-1"></i> Dealer Only</span>');
+            } else {
+                $('#assignmentStatusBadge').html('<span class="badge bg-success-subtle text-success border border-success border-opacity-25 px-2.5 py-1.5"><i class="fas fa-user me-1"></i> Customer Only</span>');
+            }
+        }
+    }
+
+    $('#assignDealerCheckbox, #assignCustomerCheckbox').on('change', updateSaleAssignmentState);
+
+    // Form submit validation: ensure at least one checkbox is selected
+    $('#recordSaleForm').on('submit', function(e) {
+        const dealerChecked = $('#assignDealerCheckbox').is(':checked');
+        const customerChecked = $('#assignCustomerCheckbox').is(':checked');
+
+        if (!dealerChecked && !customerChecked) {
+            e.preventDefault();
+            $('#assignmentErrorAlert').removeClass('d-none');
+            $('#assignDealerCheckbox').focus();
+            return false;
+        }
+    });
+
+    // Reset default modal state upon open (Dealer checked, Customer hidden)
+    $('#recordSaleModal').on('show.bs.modal', function() {
+        $('#assignDealerCheckbox').prop('checked', true);
+        $('#assignCustomerCheckbox').prop('checked', false);
+        $('#assignmentErrorAlert').addClass('d-none');
+        updateSaleAssignmentState();
+    });
 });
 
 function openReplacementModal(saleId, oldSerial, dealer, customer) {
     $('#repSaleId').val(saleId);
     $('#repOldSerialDisplay').text(oldSerial);
     $('#repOldSerialInput').val(oldSerial);
-    $('#repDealerInput').val(dealer);
-    $('#repCustomerDisplay').text(customer);
+    $('#repDealerInput').val(dealer || '');
+    $('#repCustomerDisplay').text(customer ? customer : (dealer ? dealer + ' (Dealer)' : 'N/A'));
 
     // Fetch available replacement serials via AJAX
     $('#repNewSerialSelect').html('<option value="">Loading available units...</option>');
@@ -316,3 +460,4 @@ function openReplacementModal(saleId, oldSerial, dealer, customer) {
 }
 </script>
 @endpush
+

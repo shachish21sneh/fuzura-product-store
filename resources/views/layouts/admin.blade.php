@@ -48,6 +48,10 @@
                     <i class="fas fa-box-archive"></i>
                     <span>Product Master</span>
                 </a>
+                <a href="{{ route('admin.dealers.index') }}" class="nav-link-custom {{ request()->routeIs('admin.dealers.*') ? 'active' : '' }}">
+                    <i class="fas fa-store"></i>
+                    <span>Dealer Master</span>
+                </a>
                 <a href="{{ route('admin.sales.index') }}" class="nav-link-custom {{ request()->routeIs('admin.sales.*') ? 'active' : '' }}">
                     <i class="fas fa-cart-shopping"></i>
                     <span>Sales Management</span>
@@ -57,7 +61,7 @@
                     <span>Replacements</span>
                 </a>
 
-                <div class="nav-category">Warranty & Customers</div>
+                <div class="nav-category">Warranty & Support</div>
                 <a href="{{ route('admin.warranties.index') }}" class="nav-link-custom {{ request()->routeIs('admin.warranties.*') ? 'active' : '' }}">
                     <i class="fas fa-certificate"></i>
                     <span>Warranty Claims</span>
@@ -66,15 +70,31 @@
                     <i class="fas fa-users"></i>
                     <span>Customer List</span>
                 </a>
+                <a href="{{ route('admin.inquiries.index') }}" class="nav-link-custom {{ request()->routeIs('admin.inquiries.*') ? 'active' : '' }} d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-headset"></i>
+                        <span>Support Inquiries</span>
+                    </div>
+                    @php
+                        $sidebarUnread = \App\Models\ContactInquiry::unread()->count();
+                    @endphp
+                    @if ($sidebarUnread > 0)
+                        <span class="badge bg-danger rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">{{ $sidebarUnread }}</span>
+                    @endif
+                </a>
                 <a href="{{ route('admin.search.index') }}" class="nav-link-custom {{ request()->routeIs('admin.search.*') ? 'active' : '' }}">
                     <i class="fas fa-magnifying-glass"></i>
                     <span>Serial Search</span>
                 </a>
 
-                <div class="nav-category">Analytics & Settings</div>
+                <div class="nav-category">System & Analytics</div>
                 <a href="{{ route('admin.reports.index') }}" class="nav-link-custom {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
                     <i class="fas fa-file-invoice"></i>
                     <span>Reports & Export</span>
+                </a>
+                <a href="{{ route('admin.settings.index') }}" class="nav-link-custom {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                    <i class="fas fa-gear"></i>
+                    <span>System Settings</span>
                 </a>
                 <a href="{{ route('admin.profile') }}" class="nav-link-custom {{ request()->routeIs('admin.profile') ? 'active' : '' }}">
                     <i class="fas fa-user-gear"></i>

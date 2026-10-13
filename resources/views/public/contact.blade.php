@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'Contact Support & Helpdesk - Fuzura Product Store')
+@section('title', 'Contact Support & Helpdesk - ' . setting('site_name', 'Fuzura Store'))
 
 @section('content')
 <!-- Contact Hero -->
@@ -32,7 +32,9 @@
                         </div>
                         <div>
                             <strong class="d-block text-dark small">Toll-Free Support Line</strong>
-                            <span class="text-muted small">1-800-FUZURA-CARE</span>
+                            <a href="tel:{{ setting('support_phone', '1-800-FUZURA-CARE') }}" class="text-muted small text-decoration-none">
+                                {{ setting('support_phone', '1-800-FUZURA-CARE') }}
+                            </a>
                         </div>
                     </div>
 
@@ -42,19 +44,33 @@
                         </div>
                         <div>
                             <strong class="d-block text-dark small">Official Email Desk</strong>
-                            <span class="text-muted small">warranty@fuzura.in</span>
+                            <a href="mailto:{{ setting('support_email', 'warranty@fuzura.in') }}" class="text-muted small text-decoration-none">
+                                {{ setting('support_email', 'warranty@fuzura.in') }}
+                            </a>
                         </div>
                     </div>
 
-                    <div class="d-flex align-items-start gap-3">
+                    <div class="d-flex align-items-start gap-3 mb-4">
                         <div class="feature-icon-box icon-box-success mb-0" style="width: 44px; height: 44px; font-size: 1.1rem;">
                             <i class="fas fa-business-time"></i>
                         </div>
                         <div>
                             <strong class="d-block text-dark small">Operational Desk Hours</strong>
-                            <span class="text-muted small">Monday to Saturday<br>9:00 AM – 7:00 PM IST</span>
+                            <span class="text-muted small">{!! nl2br(e(setting('support_hours', 'Monday to Saturday, 9:00 AM – 7:00 PM IST'))) !!}</span>
                         </div>
                     </div>
+
+                    @if (setting('office_address'))
+                        <div class="d-flex align-items-start gap-3 pt-3 border-top">
+                            <div class="feature-icon-box icon-box-purple mb-0" style="width: 44px; height: 44px; font-size: 1.1rem;">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div>
+                                <strong class="d-block text-dark small">Headquarters Office</strong>
+                                <span class="text-muted small">{{ setting('office_address') }}</span>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -68,19 +84,23 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small text-dark">Full Name <span class="text-danger">*</span></label>
-                                <input type="text" name="name" class="form-control rounded-3 py-2.5" placeholder="e.g. Rahul Sharma" required>
+                                <input type="text" name="name" class="form-control rounded-3 py-2.5" placeholder="e.g. Rahul Sharma" value="{{ old('name') }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small text-dark">Email Address <span class="text-danger">*</span></label>
-                                <input type="email" name="email" class="form-control rounded-3 py-2.5" placeholder="e.g. rahul@example.com" required>
+                                <input type="email" name="email" class="form-control rounded-3 py-2.5" placeholder="e.g. rahul@example.com" value="{{ old('email') }}" required>
                             </div>
-                            <div class="col-12">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-dark">Contact Phone (Optional)</label>
+                                <input type="text" name="phone" class="form-control rounded-3 py-2.5" placeholder="e.g. +91 98765 43210" value="{{ old('phone') }}">
+                            </div>
+                            <div class="col-md-6">
                                 <label class="form-label fw-semibold small text-dark">Subject <span class="text-danger">*</span></label>
-                                <input type="text" name="subject" class="form-control rounded-3 py-2.5" placeholder="e.g. Warranty Claim for Serial FZ-SN-1002" required>
+                                <input type="text" name="subject" class="form-control rounded-3 py-2.5" placeholder="e.g. Warranty Claim for Serial #..." value="{{ old('subject') }}" required>
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-semibold small text-dark">Inquiry Message <span class="text-danger">*</span></label>
-                                <textarea name="message" rows="4" class="form-control rounded-3 py-2.5" placeholder="Please describe your query with purchase details or serial numbers..." required></textarea>
+                                <textarea name="message" rows="4" class="form-control rounded-3 py-2.5" placeholder="Please describe your query with purchase details or serial numbers..." required>{{ old('message') }}</textarea>
                             </div>
                             <div class="col-12 mt-4">
                                 <button type="submit" class="btn btn-primary-custom px-5 py-2.5 w-100">

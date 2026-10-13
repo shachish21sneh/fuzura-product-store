@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Fuzura Product Registration & Warranty Management')</title>
+    <title>@yield('title', setting('site_name', 'Fuzura Store') . ' - ' . setting('site_tagline', 'Enterprise Warranty Management'))</title>
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -118,11 +118,11 @@
                             <i class="fas fa-shield-halved"></i>
                         </div>
                         <span class="fw-extrabold fs-5 text-white">
-                            FUZURA<span class="text-gradient-accent ms-1">STORE</span>
+                            {{ strtoupper(setting('site_name', 'Fuzura Store')) }}
                         </span>
                     </div>
                     <p class="text-slate-400 small pe-lg-4 lh-base" style="color: #94a3b8;">
-                        Enterprise product serial registry and automated warranty lifecycle tracking. Verifiable N-level replacement chains, tamper-proof timelines, and instant certificate issuance.
+                        {{ setting('site_tagline', 'Enterprise product serial registry and automated warranty lifecycle tracking. Verifiable N-level replacement chains, tamper-proof timelines, and instant certificate issuance.') }}
                     </p>
                     <div class="d-flex align-items-center gap-2 mt-3">
                         <span class="pulse-led"></span>
@@ -152,9 +152,9 @@
 
                 <div class="col-lg-3">
                     <h6 class="text-white fw-bold mb-3 small text-uppercase tracking-wider">Support Helpdesk</h6>
-                    <p class="small mb-1.5" style="color: #94a3b8;"><i class="fas fa-phone-volume me-2 text-primary"></i> 1-800-FUZURA-CARE</p>
-                    <p class="small mb-1.5" style="color: #94a3b8;"><i class="fas fa-envelope-open-text me-2 text-primary"></i> warranty@fuzura.in</p>
-                    <p class="small" style="color: #94a3b8;"><i class="fas fa-business-time me-2 text-primary"></i> Mon - Sat: 9:00 AM - 7:00 PM IST</p>
+                    <p class="small mb-1.5" style="color: #94a3b8;"><i class="fas fa-phone-volume me-2 text-primary"></i> {{ setting('support_phone', '1-800-FUZURA-CARE') }}</p>
+                    <p class="small mb-1.5" style="color: #94a3b8;"><i class="fas fa-envelope-open-text me-2 text-primary"></i> <a href="mailto:{{ setting('support_email', 'warranty@fuzura.in') }}" class="text-decoration-none" style="color: #94a3b8;">{{ setting('support_email', 'warranty@fuzura.in') }}</a></p>
+                    <p class="small" style="color: #94a3b8;"><i class="fas fa-business-time me-2 text-primary"></i> {{ setting('support_hours', 'Mon - Sat: 9:00 AM - 7:00 PM IST') }}</p>
                     <div class="d-flex gap-2 mt-3">
                         <span class="badge" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; font-weight: 500;">
                             <i class="fas fa-lock me-1 text-success"></i> 256-Bit SSL Secured
@@ -166,7 +166,7 @@
             <hr class="my-4" style="border-color: rgba(255,255,255,0.08);">
 
             <div class="d-flex flex-wrap justify-content-between align-items-center small" style="color: #64748b;">
-                <div>&copy; {{ date('Y') }} Fuzura Product Store & Warranty Management. All rights reserved.</div>
+                <div>&copy; {{ date('Y') }} {{ setting('site_name', 'Fuzura Store') }}. All rights reserved.</div>
                 <div class="d-flex gap-3">
                     <a href="{{ route('admin.login') }}" class="text-decoration-none" style="color: #64748b; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#64748b'">
                         <i class="fas fa-shield-halved me-1"></i> Admin Console

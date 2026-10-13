@@ -253,6 +253,19 @@
                                     <span class="badge bg-primary-subtle text-primary small">Active</span>
                                 </div>
                                 <div class="row g-3">
+                                    @if(isset($dealers) && count($dealers) > 0)
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold small text-muted">Select Authorized Dealer (or enter custom below)</label>
+                                            <select id="quickDealerSelect" class="form-select form-select-sm bg-light">
+                                                <option value="">-- Choose Authorized Dealer from Master Directory --</option>
+                                                @foreach ($dealers as $dlr)
+                                                    <option value="{{ $dlr->name }}" data-address="{{ $dlr->address ?? ($dlr->city ? $dlr->city . ($dlr->state ? ', ' . $dlr->state : '') : '') }}">
+                                                        {{ $dlr->name }} {{ $dlr->city ? '• ' . $dlr->city : '' }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
                                     <div class="col-md-6">
                                         <label class="form-label fw-semibold small">Dealer Name <span class="text-danger">*</span></label>
                                         <input type="text" name="dealer_name" id="saleDealerNameInput" class="form-control" placeholder="e.g. Apex Electronics Mart" required>
@@ -412,6 +425,18 @@ $(document).ready(function() {
     }
 
     $('#assignDealerCheckbox, #assignCustomerCheckbox').on('change', updateSaleAssignmentState);
+
+    // Quick Dealer Autofill
+    $('#quickDealerSelect').on('change', function() {
+        const selectedName = $(this).val();
+        if (selectedName) {
+            $('#saleDealerNameInput').val(selectedName);
+            const address = $(this).find(':selected').data('address');
+            if (address) {
+                $('#saleDealerAddressInput').val(address);
+            }
+        }
+    });
 
     // Form submit validation: ensure at least one checkbox is selected
     $('#recordSaleForm').on('submit', function(e) {

@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'Fuzura - Enterprise Product Registration & Warranty Management System')
+@section('title', setting('site_name', 'Fuzura Store') . ' - ' . setting('site_tagline', 'Enterprise Product Registration & Warranty Management System'))
 
 @section('content')
 <!-- Hero Section -->
@@ -14,11 +14,11 @@
                 </div>
                 
                 <h1 class="fw-extrabold mb-3 text-white" style="letter-spacing: -0.035em; line-height: 1.18; font-size: clamp(2.1rem, 3.4vw, 2.85rem);">
-                    Protect & Trace Hardware with <span class="text-gradient-accent">Zero Friction</span>
+                    {{ setting('hero_title', 'Protect & Trace Hardware with Zero Friction') }}
                 </h1>
                 
                 <p class="lead mb-4" style="color: #cbd5e1; font-size: 1.08rem; line-height: 1.65; max-width: 580px;">
-                    Enterprise serial verification, transparent multi-level replacement tracking, and automated digital certificate issuance powered by Fuzura's immutable ledger.
+                    {{ setting('hero_subtitle', "Enterprise serial verification, transparent multi-level replacement tracking, and automated digital certificate issuance powered by Fuzura's immutable ledger.") }}
                 </p>
 
                 <!-- Command-Palette Search Console -->
@@ -28,40 +28,27 @@
                             <i class="fas fa-barcode"></i>
                         </div>
                         <input type="text" name="serial_number" class="search-bar-input" 
-                               placeholder="Enter Product Serial Number (e.g. FZ-SN-1002)" required autocomplete="off">
+                               placeholder="Enter Product Serial Number (e.g. {{ $demoSerials[0]['serial'] ?? 'FZ-SN-1002' }})" required autocomplete="off">
                         <button type="submit" class="search-bar-btn">
                             <i class="fas fa-bolt"></i>
                             <span>Verify Status</span>
                         </button>
                     </form>
 
-                    <!-- Quick Sample Serials (Spacious Layout) -->
+                    <!-- Quick Sample Serials (Dynamic & Spacious Layout) -->
                     <div class="demo-serials-container">
                         <div class="demo-serials-label">
                             <i class="fas fa-flask text-warning"></i>
                             <span>Try Demo:</span>
                         </div>
                         <div class="demo-serials-chips">
-                            <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-1002']) }}" class="sample-chip">
-                                <i class="fas fa-repeat text-warning"></i>
-                                <span>FZ-SN-1002</span>
-                                <span class="chip-context">(Chain Step)</span>
-                            </a>
-                            <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-1004']) }}" class="sample-chip">
-                                <i class="fas fa-circle-check text-success"></i>
-                                <span>FZ-SN-1004</span>
-                                <span class="chip-context">(Active Unit)</span>
-                            </a>
-                            <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-2001']) }}" class="sample-chip">
-                                <i class="fas fa-shield text-info"></i>
-                                <span>FZ-SN-2001</span>
-                                <span class="chip-context">(Active)</span>
-                            </a>
-                            <a href="{{ route('public.search', ['serial_number' => 'FZ-SN-3001']) }}" class="sample-chip">
-                                <i class="fas fa-clock text-danger"></i>
-                                <span>FZ-SN-3001</span>
-                                <span class="chip-context">(Expired)</span>
-                            </a>
+                            @foreach ($demoSerials as $demo)
+                                <a href="{{ route('public.search', ['serial_number' => $demo['serial']]) }}" class="sample-chip">
+                                    <i class="{{ $demo['icon'] }}"></i>
+                                    <span>{{ $demo['serial'] }}</span>
+                                    <span class="chip-context">({{ $demo['label'] }})</span>
+                                </a>
+                            @endforeach
                         </div>
                     </div>
                 </div>

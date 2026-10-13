@@ -4,10 +4,13 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminSearchController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DealerController;
+use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductReplacementController;
 use App\Http\Controllers\Admin\ProductSaleController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\WarrantyController;
 use App\Http\Controllers\Customer\CustomerAuthController;
 use App\Http\Controllers\Customer\CustomerDashboardController;
@@ -139,6 +142,24 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Deep Serial Search
         Route::get('/search', [AdminSearchController::class, 'index'])->name('search.index');
+
+        // Dealers Master
+        Route::get('/dealers', [DealerController::class, 'index'])->name('dealers.index');
+        Route::post('/dealers', [DealerController::class, 'store'])->name('dealers.store');
+        Route::get('/dealers/{id}', [DealerController::class, 'show'])->name('dealers.show');
+        Route::put('/dealers/{id}', [DealerController::class, 'update'])->name('dealers.update');
+        Route::delete('/dealers/{id}', [DealerController::class, 'destroy'])->name('dealers.destroy');
+        Route::post('/dealers/{id}/toggle-status', [DealerController::class, 'toggleStatus'])->name('dealers.toggle_status');
+
+        // Customer Inquiries Helpdesk
+        Route::get('/inquiries', [InquiryController::class, 'index'])->name('inquiries.index');
+        Route::get('/inquiries/{id}', [InquiryController::class, 'show'])->name('inquiries.show');
+        Route::put('/inquiries/{id}/status', [InquiryController::class, 'updateStatus'])->name('inquiries.status');
+        Route::delete('/inquiries/{id}', [InquiryController::class, 'destroy'])->name('inquiries.destroy');
+
+        // Dynamic System Settings
+        Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 
         // Admin Profile & Security
         Route::get('/profile', [AdminAuthController::class, 'profile'])->name('profile');

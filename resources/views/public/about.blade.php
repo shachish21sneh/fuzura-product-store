@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'About Us - Fuzura Enterprise Product & Warranty Platform')
+@section('title', 'About Us - ' . setting('site_name', 'Fuzura Store'))
 
 @section('content')
 <!-- About Hero -->
@@ -9,7 +9,7 @@
         <div class="row align-items-center g-5">
             <div class="col-lg-7">
                 <span class="badge mb-3" style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #a5b4fc; font-weight: 700; font-size: 0.8rem; padding: 0.4rem 0.9rem; border-radius: 9999px;">
-                    <i class="fas fa-shield-halved me-1 text-warning"></i> ABOUT FUZURA STORE
+                    <i class="fas fa-shield-halved me-1 text-warning"></i> ABOUT {{ strtoupper(setting('site_name', 'FUZURA STORE')) }}
                 </span>
                 <h1 class="display-4 fw-extrabold mb-3" style="letter-spacing: -0.035em; line-height: 1.2;">
                     Enterprise Product & Warranty <span class="text-gradient-accent">Transparency</span>

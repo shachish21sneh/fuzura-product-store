@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Dealer;
 use App\Models\Product;
 use App\Models\ProductSale;
 use Illuminate\Http\Request;
@@ -59,8 +60,9 @@ class ProductSaleController extends Controller
 
         $sales = $query->latest('bill_date')->paginate(15)->withQueryString();
         $availableProducts = Product::available()->get();
+        $dealers = Dealer::active()->orderBy('name')->get();
 
-        return view('admin.sales.index', compact('sales', 'availableProducts'));
+        return view('admin.sales.index', compact('sales', 'availableProducts', 'dealers'));
     }
 
     public function store(Request $request)
@@ -137,6 +139,16 @@ class ProductSaleController extends Controller
                 'customer_address' => $assignCustomer ? ($validated['customer_address'] ?? null) : null,
                 'invoice_number' => $validated['invoice_number'] ?? null,
             ]);
+
+            if ($assignDealer && !empty($validated['dealer_name'])) {
+                Dealer::firstOrCreate(
+                    ['name' => trim($validated['dealer_name'])],
+                    [
+                        'address' => $validated['dealer_address'] ?? null,
+                        'is_active' => true,
+                    ]
+                );
+            }
 
             // Update product status to sold
             $product->update(['status' => 'sold']);

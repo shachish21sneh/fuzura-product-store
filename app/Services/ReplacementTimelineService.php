@@ -58,9 +58,44 @@ class ReplacementTimelineService
             }
         }
 
-        // Trace forward from $rootSerial to build the ordered timeline
-        $timeline = [];
+        // Trace forward from $rootSerial to build the chain serials
+        $forwardCurr = $rootSerial;
+        $forwardVisited = [$rootSerial];
         $chainSerials = [$rootSerial];
+
+        while ($nextRep = ProductReplacement::where('old_serial_number', $forwardCurr)->first()) {
+            if (in_array($nextRep->new_serial_number, $forwardVisited)) {
+                break;
+            }
+            $forwardVisited[] = $nextRep->new_serial_number;
+            $chainSerials[] = $nextRep->new_serial_number;
+            $forwardCurr = $nextRep->new_serial_number;
+        }
+
+        // Find Warranty Registration for any serial in the chain
+        $registration = WarrantyRegistration::whereIn('product_serial_number', $chainSerials)
+            ->latest()
+            ->first();
+
+        // Resolve Customer Info (prioritize sale record, fallback to warranty registration)
+        $resolvedCustomer = !empty($sale?->customer_name)
+            ? $sale->customer_name
+            : (!empty($registration?->customer_name) ? $registration->customer_name : null);
+
+        $resolvedMobile = !empty($sale?->customer_mobile)
+            ? $sale->customer_mobile
+            : (!empty($registration?->customer_mobile) ? $registration->customer_mobile : null);
+
+        $resolvedAddress = !empty($sale?->customer_address)
+            ? $sale->customer_address
+            : (!empty($registration?->customer_address) ? $registration->customer_address : null);
+
+        $resolvedDealer = !empty($sale?->dealer_name)
+            ? $sale->dealer_name
+            : (!empty($registration?->dealer_name) ? $registration->dealer_name : 'Direct / Company Outlet');
+
+        // Build ordered timeline
+        $timeline = [];
 
         // Root Node
         $rootNode = [
@@ -68,14 +103,14 @@ class ReplacementTimelineService
             'type' => 'original',
             'title' => 'Original Product Sale',
             'serial_number' => $rootSerial,
-            'model_number' => $rootProduct?->model_number ?? $sale?->product_model ?? 'N/A',
+            'model_number' => $rootProduct?->model_number ?? $sale?->product_model ?? ($registration?->product_model ?? 'N/A'),
             'product' => $rootProduct,
-            'dealer_name' => $sale?->dealer_name ?? 'N/A',
-            'dealer_address' => $sale?->dealer_address ?? null,
-            'customer_name' => $sale?->customer_name ?? 'N/A',
-            'customer_mobile' => $sale?->customer_mobile ?? null,
-            'customer_address' => $sale?->customer_address ?? null,
-            'date' => $sale?->bill_date,
+            'dealer_name' => $resolvedDealer,
+            'dealer_address' => $sale?->dealer_address ?? $registration?->dealer_address ?? null,
+            'customer_name' => $resolvedCustomer,
+            'customer_mobile' => $resolvedMobile,
+            'customer_address' => $resolvedAddress,
+            'date' => $sale?->bill_date ?? ($registration?->purchase_date ? \Carbon\Carbon::parse($registration->purchase_date) : null),
             'status' => $rootProduct?->status ?? 'sold',
             'remarks' => 'Original purchase recorded',
             'is_searched' => ($rootSerial === $serialNumber),
@@ -93,7 +128,6 @@ class ReplacementTimelineService
                 break;
             }
             $forwardVisited[] = $nextRep->new_serial_number;
-            $chainSerials[] = $nextRep->new_serial_number;
 
             $repProduct = Product::where('serial_number', $nextRep->new_serial_number)->first();
 
@@ -105,8 +139,8 @@ class ReplacementTimelineService
                 'replaced_from' => $nextRep->old_serial_number,
                 'model_number' => $repProduct?->model_number ?? $rootNode['model_number'],
                 'product' => $repProduct,
-                'dealer_name' => $nextRep->dealer_name ?? $sale?->dealer_name ?? 'N/A',
-                'customer_name' => $nextRep->customer_name ?? $sale?->customer_name ?? 'N/A',
+                'dealer_name' => $nextRep->dealer_name ?? $resolvedDealer,
+                'customer_name' => $nextRep->customer_name ?? $resolvedCustomer,
                 'date' => $nextRep->replacement_date,
                 'status' => $repProduct?->status ?? 'sold',
                 'remarks' => $nextRep->remarks ?? 'Warranty replacement provided',
@@ -123,11 +157,6 @@ class ReplacementTimelineService
         $timeline[$lastIndex]['is_current_active'] = true;
         $activeSerial = $timeline[$lastIndex]['serial_number'];
         $activeProduct = $timeline[$lastIndex]['product'];
-
-        // Find Warranty Registration for any serial in the chain
-        $registration = WarrantyRegistration::whereIn('product_serial_number', $chainSerials)
-            ->latest()
-            ->first();
 
         // Calculate Warranty Period & Expiry
         $warrantyPeriodYears = $rootProduct?->warranty_period_years 

@@ -110,6 +110,25 @@ class CustomerWarrantyController extends Controller
             'status' => 'approved', // Auto-activated upon valid submission
         ]);
 
+        // If product sale record exists and customer details were unassigned (sold to dealer), link registered customer
+        $sale = ProductSale::where('product_serial_number', $product->serial_number)->first();
+        if ($sale) {
+            $updates = [];
+            if (empty($sale->customer_name)) {
+                $updates['customer_name'] = $validated['name'];
+            }
+            if (empty($sale->customer_mobile)) {
+                $updates['customer_mobile'] = $validated['mobile'];
+            }
+            if (empty($sale->customer_address) && !empty($validated['address'])) {
+                $updates['customer_address'] = $validated['address'];
+            }
+            if (!empty($updates)) {
+                $updates['assigned_to'] = !empty($sale->dealer_name) ? 'both' : 'customer';
+                $sale->update($updates);
+            }
+        }
+
         ActivityLog::record(
             'WARRANTY_REGISTERED',
             "Warranty registered for serial {$product->serial_number} by {$customer->email}",

@@ -61,15 +61,19 @@
 
                     <div class="col-md-6 col-lg-4">
                         <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 0.05em;">Point of Sale / Dealer</small>
-                        <span class="fw-semibold text-dark">{{ $node['dealer_name'] }}</span>
+                        <span class="fw-semibold text-dark">{{ (!empty($node['dealer_name']) && $node['dealer_name'] !== 'N/A') ? $node['dealer_name'] : 'Direct Purchase' }}</span>
                     </div>
 
-                    @if (!empty($node['customer_name']))
-                        <div class="col-md-6 col-lg-4">
-                            <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 0.05em;">Registered Customer</small>
+                    <div class="col-md-6 col-lg-4">
+                        <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 0.05em;">Registered Customer</small>
+                        @if (!empty($node['customer_name']) && $node['customer_name'] !== 'N/A')
                             <span class="fw-semibold text-dark">{{ $node['customer_name'] }}</span>
-                        </div>
-                    @endif
+                        @else
+                            <span class="badge bg-light text-muted border fw-normal">
+                                <i class="fas fa-clock me-1"></i> Not Registered Yet (Dealer Stock)
+                            </span>
+                        @endif
+                    </div>
 
                     @if ($node['type'] === 'replacement' && !empty($node['replaced_from']))
                         <div class="col-md-6 col-lg-4">

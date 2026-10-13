@@ -139,27 +139,36 @@
                     <!-- Customer & Dealer Card -->
                     <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
                         <h6 class="fw-bold text-dark mb-3"><i class="fas fa-user-tag text-success me-2"></i> Sale & Assignment Info</h6>
-                        @if ($result['sale'])
+                        @if ($result['sale'] || $result['registration'])
                             <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
                                 <li class="d-flex justify-content-between align-items-center">
-                                    <span class="text-muted">Assigned To:</span>
-                                    @php $badge = $result['sale']->assignment_badge; @endphp
+                                    <span class="text-muted">Assigned / Channel:</span>
+                                    @php $badge = $result['sale'] ? $result['sale']->assignment_badge : ['class' => 'bg-success-subtle text-success border border-success border-opacity-25', 'icon' => 'fas fa-user', 'label' => 'Customer Registered']; @endphp
                                     <span class="badge {{ $badge['class'] }} py-1 px-2">
                                         <i class="{{ $badge['icon'] }} me-1"></i>{{ $badge['label'] }}
                                     </span>
                                 </li>
                                 <li class="d-flex justify-content-between">
                                     <span class="text-muted">Dealer:</span>
-                                    <span class="fw-semibold text-dark">{{ $result['sale']->dealer_name ?? 'Not Assigned' }}</span>
+                                    <span class="fw-semibold text-dark">{{ $result['sale']->dealer_name ?? ($result['registration']->dealer_name ?? 'Direct Purchase') }}</span>
                                 </li>
                                 <li class="d-flex justify-content-between">
                                     <span class="text-muted">Customer:</span>
-                                    <span class="fw-semibold text-dark">{{ $result['sale']->customer_name ?? 'Not Assigned' }}</span>
+                                    <span class="fw-semibold text-dark">
+                                        @if (!empty($result['sale']?->customer_name))
+                                            {{ $result['sale']->customer_name }}
+                                        @elseif (!empty($result['registration']?->customer_name))
+                                            {{ $result['registration']->customer_name }} <span class="badge bg-success-subtle text-success small py-0.5">Registered</span>
+                                        @else
+                                            <span class="badge bg-light text-muted border fw-normal">Not Registered Yet</span>
+                                        @endif
+                                    </span>
                                 </li>
-                                @if ($result['sale']->customer_mobile)
+                                @php $activeMobile = $result['sale']->customer_mobile ?? ($result['registration']->customer_mobile ?? null); @endphp
+                                @if ($activeMobile)
                                     <li class="d-flex justify-content-between">
                                         <span class="text-muted">Customer Mobile:</span>
-                                        <span class="fw-semibold text-dark">{{ $result['sale']->customer_mobile }}</span>
+                                        <span class="fw-semibold text-dark">{{ $activeMobile }}</span>
                                     </li>
                                 @endif
                                 <li class="d-flex justify-content-between">

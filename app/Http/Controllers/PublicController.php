@@ -46,7 +46,7 @@ class PublicController extends Controller
         if (empty($demoSerials)) {
             // Auto-detect real live serials from database
             // A. Serial in a replacement chain
-            $chainSerial = ProductReplacement::latest()->value('original_serial_number');
+            $chainSerial = ProductReplacement::latest()->value('old_serial_number');
             if ($chainSerial) {
                 $demoSerials[] = [
                     'serial' => $chainSerial,
